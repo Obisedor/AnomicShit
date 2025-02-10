@@ -42,12 +42,12 @@ while true do
     for i, v in pairs(game.Workspace.PlayerVehicles:GetChildren()) do
         if v.Name == TargetVehicle" then
             Vehicles[v] = {
-                Locked = false
+                Locked = true
             }
             if v.VehicleSeat.CarLocked.Value then
-                Vehicles[v].LockDebounce = true
+                Vehicles[v].Locked = true
                 Events.LockCar:FireServer(v)
-                task.spawn(function() task.wait(1.5) Vehicles[v].LockDebounce = false end)
+                task.spawn(function() task.wait(1.5) Vehicles[v].Locked = false end)
             else
                 
             end
