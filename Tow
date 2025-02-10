@@ -27,9 +27,31 @@ while true do
     repeat task.wait() until not Vehicle.VehicleSeat.Towed.Value and not TowTruck.VehicleSeat.TowingVehicle.Value
 end
 
+
+
+
+
+local TargetVehicle = "Caddy"
+
+local Events = game:GetService("ReplicatedStorage"):WaitForChild("_CS.Events")
+local LP = game.Players.LocalPlayer
+
 local Vehicles = {}
-for i, v in pairs(game.Workspace.PlayerVehicles:GetChildren()) do
-    if v.Name == "Caddy" then
-        
+
+while true do
+    for i, v in pairs(game.Workspace.PlayerVehicles:GetChildren()) do
+        if v.Name == TargetVehicle" then
+            Vehicles[v] = {
+                Locked = false
+            }
+            if v.VehicleSeat.CarLocked.Value then
+                Vehicles[v].LockDebounce = true
+                Events.LockCar:FireServer(v)
+                task.spawn(function() task.wait(1.5) Vehicles[v].LockDebounce = false end)
+            else
+                
+            end
+        end
     end
+    task.wait()
 end
