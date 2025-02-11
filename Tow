@@ -1,57 +1,51 @@
-while true do
-    local Vehicle = game.Workspace.PlayerVehicles["Caddy"]
-    local TowTruck = game.Workspace.PlayerVehicles["Tow Truck"]
-
-    local Events = game:GetService("ReplicatedStorage"):WaitForChild("_CS.Events")
-    local LP = game.Players.LocalPlayer
-    local CS = game:GetService("CollectionService")
-
-    Events.LockCar:FireServer(Vehicle)
-    repeat task.wait() until Vehicle.VehicleSeat.CarLocked.Value
-    repeat task.wait(0.1) until not CS:HasTag(Vehicle, "LockDebounce") wait(1.15)
-    Events.EnterVehicle:FireServer(Vehicle, "FrontLeft")
-    repeat task.wait() until LP.Character.Humanoid.SeatPart
-    LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
-    wait(.5)
-    LP.Character.Humanoid.Jump = true
-    repeat task.wait() until not LP.Character.Humanoid.SeatPart wait(.1)
-
-    LP.Character.HumanoidRootPart.CFrame = CFrame.new(395, -2, -1786)
-    repeat task.wait() until (LP.Character.HumanoidRootPart.Position - Vector3.new(395, -2, -1786)).Magnitude < 5 wait(.5)
-    
-    Events.GetTowingTool:FireServer(TowTruck)
-    repeat task.wait() until LP.Character:FindFirstChild("Tow Car")
-    Events.TowCar:FireServer(TowTruck, "Tow", Vehicle)
-    repeat task.wait() until Vehicle.VehicleSeat.Towed.Value and TowTruck.VehicleSeat.TowingVehicle.Value
-    Events.TowCar:FireServer(TowTruck, "Release", Vehicle)
-    repeat task.wait() until not Vehicle.VehicleSeat.Towed.Value and not TowTruck.VehicleSeat.TowingVehicle.Value
-end
-
-
-
-
-
 local TargetVehicle = "Caddy"
+local TowTruck = game.Workspace.PlayerVehicles["Tow Truck"]
 
 local Events = game:GetService("ReplicatedStorage"):WaitForChild("_CS.Events")
 local LP = game.Players.LocalPlayer
 
 local Vehicles = {}
 
+for i, v in pairs(game.Workspace.PlayerVehicles:GetChildren()) do
+    if v.Name == TargetVehicle then
+        Vehicles[v] = {
+            Locked = false,
+            LockDebounce = false
+        }
+    end
+    Events.LockCar:FireServer(v)
+end
+
+task.wait(1.5)
+
 while true do
-    for i, v in pairs(game.Workspace.PlayerVehicles:GetChildren()) do
-        if v.Name == TargetVehicle" then
-            Vehicles[v] = {
-                Locked = true
-            }
-            if v.VehicleSeat.CarLocked.Value then
-                Vehicles[v].Locked = true
-                Events.LockCar:FireServer(v)
-                task.spawn(function() task.wait(1.5) Vehicles[v].Locked = false end)
-            else
-                
-            end
+    for i, v in pairs(Vehicles) do
+        if not v.Locked and not v.LockDebounce then
+            Events.EnterVehicle:FireServer(i, "FrontLeft")
+            repeat task.wait() until LP.Character and LP.Character:FindFirstChild("Humanoid") and LP.Character.Humanoid.SeatPart
+
+            LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
+            wait(0.5)
+            LP.Character.Humanoid.Jump = true
+            repeat task.wait() until not LP.Character.Humanoid.SeatPart
+            wait(0.1)
+
+            LP.Character.HumanoidRootPart.CFrame = CFrame.new(395, -2, -1786)
+            repeat task.wait() until (LP.Character.HumanoidRootPart.Position - Vector3.new(395, -2, -1786)).Magnitude < 10
+            wait(0.5)
+
+            Events.GetTowingTool:FireServer(TowTruck)
+            repeat task.wait() until LP.Character:FindFirstChild("Tow Car")
+            Events.TowCar:FireServer(TowTruck, "Tow", i)
+            repeat task.wait() until i.VehicleSeat.Towed.Value and TowTruck.VehicleSeat.TowingVehicle.Value
+            Events.TowCar:FireServer(TowTruck, "Release", i)
+            repeat task.wait() until not i.VehicleSeat.Towed.Value and not TowTruck.VehicleSeat.TowingVehicle.Value
+            v.Locked = true
+            v.LockDebounce = true
+			task.wait(.25)
+            Events.LockCar:FireServer(i)
+            task.spawn(function() task.wait(1.5) v.Locked = false v.LockDebounce = false end)
         end
     end
-    task.wait()
+	task.wait()
 end
