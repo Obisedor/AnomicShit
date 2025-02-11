@@ -18,13 +18,14 @@ end
 
 game.Workspace.PlayerVehicles.ChildAdded:Connect(function(Child)
     wait(5)
-    Events.LockCar:FireServer(v)
+    Events.LockCar:FireServer(Child)
     if Child.Name == TargetVehicle then
         Vehicles[Child] = {
-            Locked = false,
-            LockDebounce = false
+            Locked = true,
+            LockDebounce = true
         }
     end
+    task.spawn(function() task.wait(1.5) Vehicles[Child].Locked = false Vehicles[Child].LockDebounce = false end)
 end)
 
 task.wait(1.5)
