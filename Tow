@@ -16,6 +16,17 @@ for i, v in pairs(game.Workspace.PlayerVehicles:GetChildren()) do
     Events.LockCar:FireServer(v)
 end
 
+game.Workspace.PlayerVehicles.ChildAdded:Connect(function(Child)
+    wait(5)
+    Events.LockCar:FireServer(v)
+    if Child.Name == TargetVehicle then
+        Vehicles[Child] = {
+            Locked = false,
+            LockDebounce = false
+        }
+    end
+end)
+
 task.wait(1.5)
 
 while true do
