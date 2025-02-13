@@ -16,18 +16,6 @@ for i, v in pairs(game.Workspace.PlayerVehicles:GetChildren()) do
     Events.LockCar:FireServer(v)
 end
 
-game.Workspace.PlayerVehicles.ChildAdded:Connect(function(Child)
-    wait(5)
-    Events.LockCar:FireServer(Child)
-    if Child.Name == TargetVehicle then
-        Vehicles[Child] = {
-            Locked = true,
-            LockDebounce = true
-        }
-    end
-    task.spawn(function() task.wait(1.5) Vehicles[Child].Locked = false Vehicles[Child].LockDebounce = false end)
-end)
-
 task.wait(1.5)
 
 while true do
@@ -54,7 +42,7 @@ while true do
             repeat task.wait() until not i.VehicleSeat.Towed.Value and not TowTruck.VehicleSeat.TowingVehicle.Value
             v.Locked = true
             v.LockDebounce = true
-			task.wait(.25)
+	    task.wait(.25)
             Events.LockCar:FireServer(i)
             task.spawn(function() task.wait(1.5) v.Locked = false v.LockDebounce = false end)
         end
