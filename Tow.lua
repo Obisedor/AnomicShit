@@ -23,16 +23,17 @@ while true do
         if not v.Locked and not v.LockDebounce then
             Events.EnterVehicle:FireServer(i, "FrontLeft")
             repeat task.wait() until LP.Character and LP.Character:FindFirstChild("Humanoid") and LP.Character.Humanoid.SeatPart
-
             LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
-            wait(0.5)
+			task.wait(.05)
+            LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
+            wait(0.65)
             LP.Character.Humanoid.Jump = true
             repeat task.wait() until not LP.Character.Humanoid.SeatPart
             wait(0.1)
 
             LP.Character.HumanoidRootPart.CFrame = CFrame.new(395, -2, -1786)
             repeat task.wait() until (LP.Character.HumanoidRootPart.Position - Vector3.new(395, -2, -1786)).Magnitude < 10
-            wait(0.5)
+            wait(0.65)
 
             Events.GetTowingTool:FireServer(TowTruck)
             repeat task.wait() until LP.Character:FindFirstChild("Tow Car")
@@ -42,7 +43,7 @@ while true do
             repeat task.wait() until not i.VehicleSeat.Towed.Value and not TowTruck.VehicleSeat.TowingVehicle.Value
             v.Locked = true
             v.LockDebounce = true
-	    task.wait(.25)
+	    	task.wait(.25)
             Events.LockCar:FireServer(i)
             task.spawn(function() task.wait(1.5) v.Locked = false v.LockDebounce = false end)
         end
