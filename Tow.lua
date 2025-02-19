@@ -36,7 +36,7 @@ for i, v in pairs(game.Workspace.PlayerVehicles:GetChildren()) do
             LockDebounce = false
         }
     end
-    if not v.VehicleSeat.CarLocked.Value then
+    if v.VehicleSeat.CarLocked.Value then
         Events.LockCar:FireServer(v)
     end
 end
@@ -51,7 +51,7 @@ while true do
 
             Events.EnterVehicle:FireServer(i, "FrontLeft")
             print("Enter the target vehicle")
-            repeat task.wait() until LP.Character and LP.Character:FindFirstChild("Humanoid") and LP.Character.Humanoid.SeatPart
+            repeat task.wait() until LP.Character.Humanoid.SeatPart task.wait(.15)
 
             LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
 			task.wait(.05)
@@ -66,8 +66,7 @@ while true do
 
             LP.Character.HumanoidRootPart.CFrame = CFrame.new(395, -2, -1786)
             print("teleport HRP to tow truck")
-            wait(0.65)
-
+            wait(1.5)
             Events.GetTowingTool:FireServer(TowTruck)
             print("get tow tool")
             repeat task.wait() until LP.Character:FindFirstChild("Tow Car")
@@ -75,7 +74,7 @@ while true do
             local Timeout = 0
             Events.TowCar:FireServer(TowTruck, "Tow", i)
             print("tow")
-            repeat task.wait(.05) Timeout = Timeout + .05 until i.VehicleSeat.Towed.Value and TowTruck.VehicleSeat.TowingVehicle.Value or Timeout.Value >= 1
+            repeat task.wait(.05) Timeout = Timeout + .05 until i.VehicleSeat.Towed.Value and TowTruck.VehicleSeat.TowingVehicle.Value or Timeout >= 1
             if Timeout >= 1 then Failed = true FailedSpot = "Towing" end
 
             local Timeout = 0
