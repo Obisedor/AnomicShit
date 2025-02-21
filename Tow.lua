@@ -51,7 +51,7 @@ while true do
 
             Events.EnterVehicle:FireServer(i, "FrontLeft")
             print("Enter the target vehicle")
-            repeat task.wait() until LP.Character.Humanoid.SeatPart task.wait(.15)
+            repeat task.wait() until LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit == true task.wait(.35)
 
             LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
 			task.wait(.05)
@@ -66,7 +66,7 @@ while true do
 
             LP.Character.HumanoidRootPart.CFrame = CFrame.new(395, -2, -1786)
             print("teleport HRP to tow truck")
-            wait(.5))
+            wait(1)
             local Timeout = 0
             Events.GetTowingTool:FireServer(TowTruck)
             print("get tow tool")
