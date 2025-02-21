@@ -66,10 +66,12 @@ while true do
 
             LP.Character.HumanoidRootPart.CFrame = CFrame.new(395, -2, -1786)
             print("teleport HRP to tow truck")
-            wait(1.5)
+            wait(.5))
+            local Timeout = 0
             Events.GetTowingTool:FireServer(TowTruck)
             print("get tow tool")
-            repeat task.wait() until LP.Character:FindFirstChild("Tow Car")
+            repeat task.wait(.05) Timeout = Timeout + .05 until LP.Character:FindFirstChild("Tow Car") or Timeout >= 1
+            if Timeout >= 1 then Failed = true FailedSpot = "GetTowTool" end
 
             local Timeout = 0
             Events.TowCar:FireServer(TowTruck, "Tow", i)
@@ -89,7 +91,7 @@ while true do
                 Events.LockCar:FireServer(i)
                 task.spawn(function() task.wait(1.5) v.Locked = false v.LockDebounce = false end)
             else
-                SendMessageEMBED("https://discord.com/api/webhooks/1341709504924094474/7i0_3-5ZZWEPO-V0DoTAFIosXUCNnjhVbWIKq7co-OgARmRodD8-8ICg5d5XNpPQSTzr", {Title = "ERROR", Description = "Error occured in: " .. FailedSpot or "unknown"})
+                SendMessageEMBED("https://discord.com/api/webhooks/1341709504924094474/7i0_3-5ZZWEPO-V0DoTAFIosXUCNnjhVbWIKq7co-OgARmRodD8-8ICg5d5XNpPQSTzr", {title = "ERROR", description = "Error occured in: " .. FailedSpot or "unknown"})
             end
         end
     end
