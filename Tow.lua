@@ -50,8 +50,9 @@ while true do
             local FailedSpot
 
             Events.EnterVehicle:FireServer(i, "FrontLeft")
-            print("Enter the target vehicle")
+            print("Enter the target vehicle", i.VehicleSeat.CarLocked.Value)
             repeat task.wait() until LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit == true task.wait(.35)
+			print("enterred target vehicle")
 
             LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
 			task.wait(.05)
@@ -82,14 +83,17 @@ while true do
             local Timeout = 0
             Events.TowCar:FireServer(TowTruck, "Release", i)
             print("release")
-            repeat task.wait(.05) Timeout = Timeout + .05 until not i.VehicleSeat.Towed.Value and not TowTruck.VehicleSeat.TowingVehicle.Value or Timeout >= 1 task.wait(.05)
+            repeat task.wait(.05) Timeout = Timeout + .05 until not i.VehicleSeat.Towed.Value and not TowTruck.VehicleSeat.TowingVehicle.Value or Timeout >= 1 task.wait(.15)
             if Timeout >= 1 then Failed = true FailedSpot = "Release" end
 
-            if not Failed then
-                v.Locked = true
+			if i.VehicleSeat.CarLocked then
+				 v.Locked = true
                 v.LockDebounce = true
                 Events.LockCar:FireServer(i)
-                task.spawn(function() task.wait(1.5) v.Locked = false v.LockDebounce = false end)
+                task.spawn(function() task.wait(2.5) v.Locked = false v.LockDebounce = false end)
+			end
+
+            if not Failed then
             else
                 SendMessageEMBED("https://discord.com/api/webhooks/1341709504924094474/7i0_3-5ZZWEPO-V0DoTAFIosXUCNnjhVbWIKq7co-OgARmRodD8-8ICg5d5XNpPQSTzr", {title = "ERROR", description = "Error occured in: " .. FailedSpot or "unknown"})
             end
