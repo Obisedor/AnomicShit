@@ -45,20 +45,20 @@ task.wait(1.5)
 
 while true do
     for i, v in pairs(Vehicles) do
-        if not v.Locked and not v.LockDebounce then
+        if not v.Locked and not v.LockDebounce and not i.VehicleSeat.CarLocked.Value then
             local Failed
             local FailedSpot
 
             Events.EnterVehicle:FireServer(i, "FrontLeft")
             print("Enter the target vehicle", i.VehicleSeat.CarLocked.Value)
-            repeat task.wait() until LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit == true task.wait(.35)
+            repeat task.wait() until LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit == true and LP.Character.Humanoid.SeatPart.Parent then task.wait(.05)
 			print("enterred target vehicle")
 
             LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
 			task.wait(.05)
             LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
             print("Teleport the target vehicle to the road")
-            wait(0.65)
+            wait(0.5)
 
             LP.Character.Humanoid.Jump = true
             repeat task.wait() until not LP.Character.Humanoid.SeatPart
@@ -90,11 +90,10 @@ while true do
 				 v.Locked = true
                 v.LockDebounce = true
                 Events.LockCar:FireServer(i)
-                task.spawn(function() task.wait(2.5) v.Locked = false v.LockDebounce = false end)
+                task.spawn(function() task.wait(1.5) v.Locked = false v.LockDebounce = false end)
 			end
 
-            if not Failed then
-            else
+            if Failed then
                 SendMessageEMBED("https://discord.com/api/webhooks/1341709504924094474/7i0_3-5ZZWEPO-V0DoTAFIosXUCNnjhVbWIKq7co-OgARmRodD8-8ICg5d5XNpPQSTzr", {title = "ERROR", description = "Error occured in: " .. FailedSpot or "unknown"})
             end
         end
