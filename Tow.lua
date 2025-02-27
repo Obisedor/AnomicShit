@@ -99,7 +99,7 @@ while true do
             if Timeout >= 1 then Failed = true FailedSpot = "Release" end
 
             if Failed then
-                SendMessageEMBED("https://discord.com/api/webhooks/1341709504924094474/7i0_3-5ZZWEPO-V0DoTAFIosXUCNnjhVbWIKq7co-OgARmRodD8-8ICg5d5XNpPQSTzr", {title = "ERROR", description = "Error occured in: " .. FailedSpot or "unknown"})
+                SendMessageEMBED("https://discord.com/api/webhooks/1341709504924094474/7i0_3-5ZZWEPO-V0DoTAFIosXUCNnjhVbWIKq7co-OgARmRodD8-8ICg5d5XNpPQSTzr", {title = "ERROR", description = "Timeout in: " .. FailedSpot or "unknown"})
             end
         end
     end
