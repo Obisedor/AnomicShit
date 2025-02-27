@@ -24,5 +24,5 @@ repeat
         Events.GiveMoneyToPlr:FireServer(findPlayerByPartialName(TargetPlayer), tostring(LeftAmount))
         LeftAmount = 0
     end
-    task.wait(12.5)
+    task.wait(11.5)
 until LeftAmount == 0 
