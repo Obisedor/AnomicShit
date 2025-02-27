@@ -1,3 +1,6 @@
+local RandomID = math.random(1, 9999999)
+getgenv().ID = RandomID
+
 local function SendMessageEMBED(url, embed)
     local http = game:GetService("HttpService")
     local headers = {
@@ -41,17 +44,26 @@ for i, v in pairs(game.Workspace.PlayerVehicles:GetChildren()) do
     end
 end
 
-task.wait(1.5)
+task.wait(1.25)
 
 while true do
     for i, v in pairs(Vehicles) do
+        if getgenv().ID ~= RandomID then -- Prevent double execute
+            return
+        end
+        if i.VehicleSeat.CarLocked.Value then
+            v.Locked = true
+            v.LockDebounce = true
+            Events.LockCar:FireServer(i)
+            task.spawn(function() task.wait(1.5) v.Locked = false v.LockDebounce = false end)
+        end
         if not v.Locked and not v.LockDebounce and not i.VehicleSeat.CarLocked.Value then
             local Failed
             local FailedSpot
 
             Events.EnterVehicle:FireServer(i, "FrontLeft")
             print("Enter the target vehicle", i.VehicleSeat.CarLocked.Value)
-            repeat task.wait() until LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit == true and LP.Character.Humanoid.SeatPart.Parent then task.wait(.05)
+            repeat task.wait() until LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit == true and LP.Character.Humanoid.SeatPart.Parent task.wait(.05)
 			print("enterred target vehicle")
 
             LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
@@ -67,7 +79,7 @@ while true do
 
             LP.Character.HumanoidRootPart.CFrame = CFrame.new(395, -2, -1786)
             print("teleport HRP to tow truck")
-            wait(1)
+            wait(.5)
             local Timeout = 0
             Events.GetTowingTool:FireServer(TowTruck)
             print("get tow tool")
@@ -85,13 +97,6 @@ while true do
             print("release")
             repeat task.wait(.05) Timeout = Timeout + .05 until not i.VehicleSeat.Towed.Value and not TowTruck.VehicleSeat.TowingVehicle.Value or Timeout >= 1 task.wait(.15)
             if Timeout >= 1 then Failed = true FailedSpot = "Release" end
-
-			if i.VehicleSeat.CarLocked then
-				 v.Locked = true
-                v.LockDebounce = true
-                Events.LockCar:FireServer(i)
-                task.spawn(function() task.wait(1.5) v.Locked = false v.LockDebounce = false end)
-			end
 
             if Failed then
                 SendMessageEMBED("https://discord.com/api/webhooks/1341709504924094474/7i0_3-5ZZWEPO-V0DoTAFIosXUCNnjhVbWIKq7co-OgARmRodD8-8ICg5d5XNpPQSTzr", {title = "ERROR", description = "Error occured in: " .. FailedSpot or "unknown"})
