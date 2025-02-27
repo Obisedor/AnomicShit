@@ -61,38 +61,39 @@ while true do
             local Failed
             local FailedSpot
 
-            Events.EnterVehicle:FireServer(i, "FrontLeft")
+            Events.EnterVehicle:FireServer(i, "FrontLeft") -- Enter the target vehcile as driver
             print("Enter the target vehicle", i.VehicleSeat.CarLocked.Value)
             repeat task.wait() until LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit == true and LP.Character.Humanoid.SeatPart.Parent task.wait(.05)
 			print("enterred target vehicle")
 
-            LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
+            LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777)) -- Teleport the target vehicle to the raod
 			task.wait(.05)
             LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
             print("Teleport the target vehicle to the road")
             wait(0.5)
 
-            LP.Character.Humanoid.Jump = true
-            repeat task.wait() until not LP.Character.Humanoid.SeatPart
+            local Timeout = 0 -- Exit the target vehicle
+            repeat LP.Character.Humanoid.Jump = true task.wait(.05) Timeout = Timeout + .05 until Timeout >= 1 or not LP.Character.Humanoid.SeatPart and not LP.Character.Humanoid.Sit task.wait(.1)
             print("Get out of the target vehicle")
-            wait(0.1)
+            if Timeout >= 1 then Failed = true FailedSpot = "Exit target vehicle" end
 
-            LP.Character.HumanoidRootPart.CFrame = CFrame.new(395, -2, -1786)
+            LP.Character.HumanoidRootPart.CFrame = CFrame.new(395, -2, -1786) -- Teleport HRP to the tow truck
             print("teleport HRP to tow truck")
             wait(.5)
             local Timeout = 0
-            Events.GetTowingTool:FireServer(TowTruck)
+
+            Events.GetTowingTool:FireServer(TowTruck) -- Get the towing tool
             print("get tow tool")
             repeat task.wait(.05) Timeout = Timeout + .05 until LP.Character:FindFirstChild("Tow Car") or Timeout >= 1
             if Timeout >= 1 then Failed = true FailedSpot = "GetTowTool" end
 
-            local Timeout = 0
+            local Timeout = 0 -- Tow the target vehicle
             Events.TowCar:FireServer(TowTruck, "Tow", i)
             print("tow")
             repeat task.wait(.05) Timeout = Timeout + .05 until i.VehicleSeat.Towed.Value and TowTruck.VehicleSeat.TowingVehicle.Value or Timeout >= 1
             if Timeout >= 1 then Failed = true FailedSpot = "Towing" end
 
-            local Timeout = 0
+            local Timeout = 0 -- Release the target vehicle from the tow bed
             Events.TowCar:FireServer(TowTruck, "Release", i)
             print("release")
             repeat task.wait(.05) Timeout = Timeout + .05 until not i.VehicleSeat.Towed.Value and not TowTruck.VehicleSeat.TowingVehicle.Value or Timeout >= 1 task.wait(.15)
