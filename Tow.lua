@@ -6,9 +6,10 @@ local TargetVehicle = "Caddy"
 local TowTruck
 for i, v in pairs(game.Workspace.PlayerVehicles:GetChildren()) do
     if v.Name == "Tow Truck" then
-        if v.Properties.Owner.Value.Name == game.Players.localPlayer then TowTruck = v end
+        if v.Properties.Owner.Value.Name == game.Players.localPlayer.Name then TowTruck = v end
     end
 end
+print(TowTruck.Name)
 
 local Events = game:GetService("ReplicatedStorage"):WaitForChild("_CS.Events")
 local LP = game.Players.LocalPlayer
@@ -16,7 +17,7 @@ local LP = game.Players.LocalPlayer
 local Vehicles = {}
 
 for i, v in pairs(game.Workspace.PlayerVehicles:GetChildren()) do
-    if v.Name == TargetVehicle and v.Properties.Owner.Value.Name == game.Players.LocalPlayer.Name then
+    if v.Name == TargetVehicle and v.Properties.Owner.Value.Name ~= game.Players.LocalPlayer.Name then
         Vehicles[v] = {
             Locked = v.VehicleSeat.CarLocked.Value,
             LockDebounce = false
