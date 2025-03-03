@@ -33,7 +33,7 @@ local LP = game.Players.LocalPlayer
 local Vehicles = {}
 
 for i, v in pairs(game.Workspace.PlayerVehicles:GetChildren()) do
-    if v.Name == TargetVehicle then
+    if v.Name == TargetVehicle and v.Properties.Owner.Value.Name == game.Players.LocalPlayer.Name then
         Vehicles[v] = {
             Locked = v.VehicleSeat.CarLocked.Value,
             LockDebounce = false
