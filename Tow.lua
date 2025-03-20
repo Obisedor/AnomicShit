@@ -47,8 +47,12 @@ while true do
             Events.EnterVehicle:FireServer(i, "FrontLeft") -- Enter the target vehcile as driver
             print("Enter the target vehicle", i.VehicleSeat.CarLocked.Value)
             local Timeout = 0
-            repeat task.wait(.05) Timeout = Timeout + .05 until LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit == true and LP.Character.Humanoid.SeatPart.Parent task.wait(.05) or Timeout >= .75
-			print("enterred target vehicle")
+local Timeout = 0
+repeat
+    task.wait(0.05)
+    Timeout = Timeout + 0.05
+until (LP.Character and LP.Character.Humanoid and LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit) 
+   or Timeout >= 0.75			print("enterred target vehicle")
 
             LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777)) -- Teleport the target vehicle to the raod
 			task.wait(.05)
