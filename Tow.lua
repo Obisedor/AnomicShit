@@ -34,12 +34,14 @@ while true do
         if getgenv().ID ~= RandomID then -- Prevent double execute
             return
         end
-        if i.VehicleSeat.CarLocked.Value then
-            v.Locked = true
-            v.LockDebounce = true
-            Events.LockCar:FireServer(i)
-            task.spawn(function() task.wait(1.5) v.Locked = false v.LockDebounce = false end)
-        end
+        if i.VehicleSeat then
+			if i.VehicleSeat.CarLocked.Value then
+            	v.Locked = true
+            	v.LockDebounce = true
+            	Events.LockCar:FireServer(i)
+            	task.spawn(function() task.wait(1.5) v.Locked = false v.LockDebounce = false end)
+        	end
+		end
         if not v.Locked and not v.LockDebounce and not i.VehicleSeat.CarLocked.Value then
             local Failed
             local FailedSpot
@@ -54,18 +56,20 @@ repeat
 until (LP.Character and LP.Character.Humanoid and LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit) 
    or Timeout >= 0.75			print("enterred target vehicle")
 
-            LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777)) -- Teleport the target vehicle to the raod
+            if LP.Character.Humanoid.SeatPart then
+				LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777)) -- Teleport the target vehicle to the raod
 			task.wait(.05)
             LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
             print("Teleport the target vehicle to the road")
             wait(0.5)
+			end
 
             local Timeout = 0 -- Exit the target vehicle
             repeat LP.Character.Humanoid.Jump = true task.wait(.05) Timeout = Timeout + .05 until Timeout >= .75 or not LP.Character.Humanoid.SeatPart and not LP.Character.Humanoid.Sit task.wait(.1)
             print("Get out of the target vehicle")
             if Timeout >= 1 then Failed = true FailedSpot = "Exit target vehicle" end
 
-            LP.Character.HumanoidRootPart.CFrame = TowTruck.VehicleSeat.CFrame -- Teleport HRP to the tow truck
+            LP.Character.HumanoidRootPart.CFrame = CFrame.new(TowTruck.VehicleSeat.CFrame.X, TowTruck.VehicleSeat.CFrame.Y + 5, TowTruck.VehicleSeat.CFrame.Z) -- Teleport HRP to the tow truck
             print("teleport HRP to tow truck")
             wait(.5)
             local Timeout = 0
