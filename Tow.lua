@@ -1,6 +1,16 @@
+local Setup = "2"
+if Setup == "" then return end
+
 local RandomID = math.random(1, 9999999)
 getgenv().ID = RandomID
 
+local TowTruckCF
+if Setup == "1" then
+    TowTruckCF = CFrame.new(398.86731, -4.62784243, -1784.87085, -0.293692917, 0.00325258053, -0.955894411, -0.0147229442, 0.999860227, 0.00792571995, 0.955786526, 0.0164013039, -0.293603987)
+end
+if Setup == "2" then
+    TowTruckCF = CFrame.new(398.684265, -4.61369181, -1793.27283, -0.292436063, 0.00356792705, -0.956278443, -0.0109355478, 0.999915183, 0.00707489857, 0.956222534, 0.0125263836, -0.292372257)
+end
 
 local TargetVehicle = "Caddy"
 local TowTruck
@@ -21,47 +31,84 @@ for i, v in pairs(game.Workspace.PlayerVehicles:GetChildren()) do
             Locked = v.VehicleSeat.CarLocked.Value,
             LockDebounce = false
         }
-    end
-    if v.VehicleSeat.CarLocked.Value then
-        Events.LockCar:FireServer(v)
+		print(v)
     end
 end
 
-task.wait(1.25)
+-- Set tow truck on correct spot
+if TowTruck.VehicleSeat.CarLocked.Value then
+    Events.LockCar:FireServer(TowTruck)
+    task.wait(1)
+end
+Events.EnterVehicle:FireServer(TowTruck, "FrontLeft")
+        local Timeout = 0
+        repeat
+            task.wait(0.05)
+            Timeout = Timeout + 0.05
+        until (LP.Character and LP.Character.Humanoid and LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit) 
+        or Timeout >= 1
+        LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(TowTruckCF)
+		task.wait(1.5)
+        local Timeout = 0 -- Exit the target vehicle
+            repeat LP.Character.Humanoid.Jump = true task.wait(.05) Timeout = Timeout + .05 until Timeout >= .75 or not LP.Character.Humanoid.SeatPart and not LP.Character.Humanoid.Sit task.wait(.1)
 
+task.wait(1.25)
+print("zeqfezfqfezqfefqzfeqzfqezfqfeqezfs")
 while true do
+
+-- Place tow truck back on good spot
+        Events.EnterVehicle:FireServer(TowTruck, "FrontLeft")
+        local Timeout = 0
+        repeat
+            task.wait(0.05)
+            Timeout = Timeout + 0.05
+        until (LP.Character and LP.Character.Humanoid and LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit) or Timeout >= 1
+        LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(TowTruckCF)
+		task.wait(1.5)
+		LP.Character.Humanoid.Sit = false
+        local Timeout = 0 -- Exit the target vehicle
+            repeat LP.Character.Humanoid.Jump = true task.wait(.05) Timeout = Timeout + .05 until Timeout >= .75 or not LP.Character.Humanoid.SeatPart and not LP.Character.Humanoid.Sit task.wait(.15)
+
+
     for i, v in pairs(Vehicles) do
         if getgenv().ID ~= RandomID then -- Prevent double execute
             return
         end
-        if i.VehicleSeat then
+
+
+
+        
+
+
 			if i.VehicleSeat.CarLocked.Value then
             	v.Locked = true
             	v.LockDebounce = true
             	Events.LockCar:FireServer(i)
             	task.spawn(function() task.wait(1.5) v.Locked = false v.LockDebounce = false end)
         	end
-		end
+
         if not v.Locked and not v.LockDebounce and not i.VehicleSeat.CarLocked.Value then
             local Failed
             local FailedSpot
 
+			print(tostring(game.Players.LocalPlayer.Character.Humanoid.SeatPart) .. "---------")
+			warn("qezfqzef  " .. tostring(i) .. tostring(i.Parent))
             Events.EnterVehicle:FireServer(i, "FrontLeft") -- Enter the target vehcile as driver
-            print("Enter the target vehicle", i.VehicleSeat.CarLocked.Value)
             local Timeout = 0
-local Timeout = 0
-repeat
-    task.wait(0.05)
-    Timeout = Timeout + 0.05
-until (LP.Character and LP.Character.Humanoid and LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit) 
-   or Timeout >= 0.75			print("enterred target vehicle")
+            repeat
+                task.wait(0.05)
+                Timeout = Timeout + 0.05
+            until (LP.Character and LP.Character.Humanoid and LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit) or Timeout >= 3 task.wait(.15)			
+            print("enterred target vehicle")
 
-            if LP.Character.Humanoid.SeatPart then
+			if LP.Character.Humanoid.SeatPart then
 				LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777)) -- Teleport the target vehicle to the raod
-			task.wait(.05)
-            LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
-            print("Teleport the target vehicle to the road")
-            wait(0.5)
+				task.wait(.05)
+				LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(CFrame.new(431, -4, -1777))
+				print("Teleport the target vehicle to the road")
+				wait(0.5)
+				else
+					warn("no seatpart", i, i.VehicleSeat)
 			end
 
             local Timeout = 0 -- Exit the target vehicle
@@ -69,7 +116,7 @@ until (LP.Character and LP.Character.Humanoid and LP.Character.Humanoid.SeatPart
             print("Get out of the target vehicle")
             if Timeout >= 1 then Failed = true FailedSpot = "Exit target vehicle" end
 
-            LP.Character.HumanoidRootPart.CFrame = CFrame.new(TowTruck.VehicleSeat.CFrame.X, TowTruck.VehicleSeat.CFrame.Y + 5, TowTruck.VehicleSeat.CFrame.Z) -- Teleport HRP to the tow truck
+            LP.Character.HumanoidRootPart.CFrame = CFrame.new(TowTruck.VehicleSeat.CFrame.X, TowTruck.VehicleSeat.CFrame.Y + 7.5, TowTruck.VehicleSeat.CFrame.Z) -- Teleport HRP to the tow truck
             print("teleport HRP to tow truck")
             wait(.5)
             local Timeout = 0
