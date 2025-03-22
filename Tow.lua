@@ -1,4 +1,4 @@
-local Setup = "1"
+local Setup = "2"
 if Setup == "" then return end
 
 local RandomID = math.random(1, 9999999)
@@ -63,7 +63,11 @@ while true do
             task.wait(0.05)
             Timeout = Timeout + 0.05
         until (LP.Character and LP.Character.Humanoid and LP.Character.Humanoid.SeatPart and LP.Character.Humanoid.Sit) or Timeout >= 1
-        LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(TowTruckCF)
+        if LP.Character.Humanoid.SeatPart then
+			if LP.Character.Humanoid.SeatPart.Parent then
+				LP.Character.Humanoid.SeatPart.Parent:SetPrimaryPartCFrame(TowTruckCF)
+			end
+		end
 		task.wait(1.5)
 		LP.Character.Humanoid.Sit = false
         local Timeout = 0 -- Exit the target vehicle
