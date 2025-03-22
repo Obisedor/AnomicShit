@@ -1,4 +1,4 @@
-local Setup = "2"
+local Setup = "1"
 if Setup == "" then return end
 
 local RandomID = math.random(1, 9999999)
@@ -9,7 +9,7 @@ if Setup == "1" then
     TowTruckCF = CFrame.new(398.86731, -4.62784243, -1784.87085, -0.293692917, 0.00325258053, -0.955894411, -0.0147229442, 0.999860227, 0.00792571995, 0.955786526, 0.0164013039, -0.293603987)
 end
 if Setup == "2" then
-    TowTruckCF = CFrame.new(398.684265, -4.61369181, -1793.27283, -0.292436063, 0.00356792705, -0.956278443, -0.0109355478, 0.999915183, 0.00707489857, 0.956222534, 0.0125263836, -0.292372257)
+    TowTruckCF = CFrame.new(398.682617, -4.47858429, -1796.00537, -0.199798673, 0.00584261166, -0.979819536, -0.0146191875, 0.999853134, 0.00894312374, 0.979727924, 0.0161109902, -0.19968392)
 end
 
 local TargetVehicle = "Caddy"
@@ -116,7 +116,7 @@ while true do
             print("Get out of the target vehicle")
             if Timeout >= 1 then Failed = true FailedSpot = "Exit target vehicle" end
 
-            LP.Character.HumanoidRootPart.CFrame = CFrame.new(TowTruck.VehicleSeat.CFrame.X, TowTruck.VehicleSeat.CFrame.Y + 7.5, TowTruck.VehicleSeat.CFrame.Z) -- Teleport HRP to the tow truck
+            LP.Character.HumanoidRootPart.CFrame = CFrame.new(404.964905, -3.34349513, -1789.09045, 0.0297844782, -3.97299331e-08, -0.999556363, -4.93802084e-08, 1, -4.1218982e-08, 0.999556363, 5.05859852e-08, 0.0297844782) -- Teleport HRP to the tow truck
             print("teleport HRP to tow truck")
             wait(.5)
             local Timeout = 0
