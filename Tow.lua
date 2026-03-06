@@ -6,10 +6,10 @@ getgenv().ID = RandomID
 
 local TowTruckCF
 if Setup == "1" then
-    TowTruckCF = CFrame.new(398.86731, -4.62784243, -1784.87085, -0.293692917, 0.00325258053, -0.955894411, -0.0147229442, 0.999860227, 0.00792571995, 0.955786526, 0.0164013039, -0.293603987)
+	TowTruckCF = CFrame.new(399, -5, -1785, 0, 0, -1, 0, 1, 0, 1, 0, 0)
 end
 if Setup == "2" then
-    TowTruckCF = CFrame.new(398.682617, -4.47858429, -1796.00537, -0.199798673, 0.00584261166, -0.979819536, -0.0146191875, 0.999853134, 0.00894312374, 0.979727924, 0.0161109902, -0.19968392)
+	TowTruckCF = CFrame.new(399, -4, -1796, 0, 0, -1, 0, 1, 0, 1, 0, 0)
 end
 
 local TargetVehicle = "Caddy"
@@ -38,7 +38,7 @@ end
 -- Set tow truck on correct spot
 if TowTruck.VehicleSeat.CarLocked.Value then
     Events.LockCar:FireServer(TowTruck)
-    task.wait(1)
+    task.wait(.75)
 end
 Events.EnterVehicle:FireServer(TowTruck, "FrontLeft")
         local Timeout = 0
